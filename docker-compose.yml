@@ -1,0 +1,26 @@
+version: "3"
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    privileged: true
+    user: root
+    ports:
+      - 8080:8080
+      - 50000:50000
+    container_name: jenkins
+    volumes:
+      - jenkins_config:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+  agent:
+    image: jenkins/ssh-agent:jdk11
+    privileged: true
+    user: root
+    container_name: agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    expose:
+      - 22
+    environment:
+      - JENKINS_AGENT_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCvFOdj5QenKoi7LSsCackyEedFpzgxCBHnNmsRF6FOCzqlkzAponTbEkYFKFdvts+K3i8CByLci3y41ZxYq+CyOzkH80WL4L3PIuekqr9T4/FAKbC9WK+DNTpzCVJ2vNIUVpRXeBdWTcAOuf+Rfg58SxptYEwjzUbXU5l/eME9/V85FcyJwhvxz2VjMACM1GFhJoNMXoQ9A/kASrIq0v//aX9gU16Q/aosXU3SKeaKIPzBH5DaiejnUXDf96l3qsF0LoHlMsT30xEqITCw5DubdewFK1Ho4RbUsmLRgpJOc4gdEfu6TGldqKp5bMjIVgO0H8V5w1BMaR+U9aCu/oXFbsc4Jaiyrdz4yRNJ7lGglfmg4zZauBkHo3nJMdPJHMuQx/jds/CKJHAa6veFO689r0KS2r9BFEq/ZMr7uOMe++I7/lfYkEkAAPv2sTz6vUxrbfHAJ3iMVDAhQRxPf5lcoZ/7oRC1sWxfT+HTjfLmCgECBquHI0rf4c2MBaqKpJM= mark@bel-mc-221101g.ad.unosquare.com
+volumes:
+  jenkins_config:
