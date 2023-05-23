@@ -3,6 +3,9 @@ pipeline {
 
     stages {
         stage('Build') {
+            agent {
+                docker { image 'node:16' }
+            }
             steps {
                 sayHello "Mark"
                 echo 'Building..'
